@@ -438,32 +438,26 @@ function pollApi() {
       document.getElementById("aggBar").classList.remove("hidden");
     }).catch(function(){});
 
-  /* Per-booth data — tries ?action=booth_totals */
-  fetch(base + sep + "action=booth_totals&t=" + t, { cache:"no-store" })
-    .then(function(r){ return r.json(); })
-    .then(function(d){
-      /* Expects array: [{polled,total,status}, ...] matching booths order */
-      if (!Array.isArray(d)) return;
-      d.forEach(function(item, i){
-        boothData[i] = item;
+  /* Per-booth data — fetch each booth URL directly with action=totals */
+  CONFIG.booths.forEach(function(booth, i) {
+    if (!booth.url) return;
+    var sep2 = booth.url.indexOf("?") > -1 ? "&" : "?";
+    fetch(booth.url + sep2 + "action=totals&t=" + t, { cache:"no-store" })
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        var polled = typeof d.polled   === "number" ? d.polled
+                   : typeof d.voted   === "number" ? d.voted
+                   : typeof d.count   === "number" ? d.count : null;
+        var total  = typeof d.total    === "number" ? d.total
+                   : typeof d.students === "number" ? d.students : null;
+        if (polled === null || total === null) return;
+        boothData[i] = { polled: polled, total: total,
+                         status: d.status || d.booth_status || "live" };
         var card = document.getElementById("donut-" + i);
         if (card) renderDonutCard(card, i);
-      });
-    }).catch(function(){
-      /* Fallback: distribute aggPolled evenly across booths */
-      var aggP = parseInt(document.getElementById("aggPolled").textContent) || 0;
-      var aggT = parseInt(document.getElementById("aggTotal").textContent)  || 0;
-      var n    = CONFIG.booths.length;
-      if (n > 0 && aggT > 0) {
-        var perBooth = Math.round(aggT / n);
-        var perPolled = Math.round(aggP / n);
-        CONFIG.booths.forEach(function(_, i){
-          boothData[i] = { polled: perPolled, total: perBooth, status: "live" };
-          var card = document.getElementById("donut-" + i);
-          if (card) renderDonutCard(card, i);
-        });
-      }
-    });
+      })
+      .catch(function(){});
+  });
 }
 
 /* ── Boot ── */
