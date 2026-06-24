@@ -12,46 +12,47 @@
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;background:#0a0e1a}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
-.root{background:#0a0e1a;height:100vh;padding:10px;display:flex;flex-direction:column;gap:8px}
+.root{background:#0a0e1a;height:100vh;height:100dvh;padding:10px;display:flex;flex-direction:column;gap:8px}
 
 /* Header */
-.header{display:flex;justify-content:space-between;align-items:center;flex-shrink:0;padding:0 4px}
-.header-left{display:flex;align-items:center;gap:10px}
-.title{color:#e8ecf4;font-size:18px;font-weight:600;letter-spacing:.02em}
-.election-label{color:#7a9bbf;font-size:12px;font-weight:400}
-.header-right{display:flex;align-items:center;gap:8px}
-.live-badge{background:#c0392b;color:#fff;font-size:11px;font-weight:700;padding:4px 11px;border-radius:20px;display:flex;align-items:center;gap:6px;letter-spacing:.04em}
+.header{display:flex;justify-content:space-between;align-items:center;flex-shrink:0;padding:0 4px;gap:8px}
+.header-left{display:flex;align-items:center;gap:8px;min-width:0;flex:1}
+.title{color:#e8ecf4;font-size:18px;font-weight:600;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.election-label{color:#7a9bbf;font-size:12px;font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.header-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.live-badge{background:#c0392b;color:#fff;font-size:11px;font-weight:700;padding:4px 11px;border-radius:20px;display:flex;align-items:center;gap:6px;letter-spacing:.04em;white-space:nowrap}
 .dot{width:7px;height:7px;border-radius:50%;background:#fff;animation:blink 1.2s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
-.fs-btn{background:#1a2235;border:1px solid #2a3a55;color:#7a9bbf;width:30px;height:30px;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px}
+.fs-btn{background:#1a2235;border:1px solid #2a3a55;color:#7a9bbf;width:30px;height:30px;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
 .fs-btn:hover{background:#1f2d45;color:#c8d8f0}
 
 /* Aggregation bar */
-.agg-bar{flex-shrink:0;background:#111827;border:1.5px solid #1e2a40;border-radius:8px;padding:8px 16px;display:flex;align-items:center}
+.agg-bar{flex-shrink:0;background:#111827;border:1.5px solid #1e2a40;border-radius:8px;padding:8px 16px;display:flex;align-items:center;flex-wrap:wrap;gap:4px}
 .agg-bar.hidden{display:none}
-.agg-stat{flex:1;text-align:center;border-right:1px solid #1e2a40;padding:0 10px}
+.agg-stats-row{display:flex;flex:1;min-width:0}
+.agg-stat{flex:1;text-align:center;border-right:1px solid #1e2a40;padding:0 8px}
 .agg-stat:last-child{border-right:none}
 .agg-val{color:#f4d35e;font-size:20px;font-weight:700;line-height:1}
 .agg-lbl{color:#5a7090;font-size:10px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;margin-top:3px}
-.agg-progress-wrap{flex:2;padding:0 16px}
+.agg-progress-wrap{flex:2;padding:0 16px;min-width:120px}
 .agg-pct{color:#e8ecf4;font-size:11px;font-weight:600}
 .agg-track{background:#1e2a40;border-radius:99px;height:8px;overflow:hidden;margin-top:4px}
 .agg-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#27ae60,#2ecc71);transition:width .6s ease}
 
 /* Ticker */
-.ticker-wrap{flex-shrink:0;overflow:hidden;border-radius:8px;padding:8px 0;position:relative;display:none}
+.ticker-wrap{flex-shrink:0;overflow:hidden;border-radius:8px;padding:7px 0;position:relative;display:none}
 .ticker-wrap.show{display:block}
 .ticker-wrap.cat-normal{background:#0d1f10;border:1.5px solid #1a3a20}
 .ticker-wrap.cat-urgent{background:#200e0e;border:1.5px solid #4a1a1a}
 .ticker-wrap.cat-closed{background:#1a1208;border:1.5px solid #3a2a10}
 .ticker-wrap.cat-alees{background:#1a1208;border:1.5px solid #3a2a10}
-.ticker-badge{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:20px;z-index:2;white-space:nowrap}
+.ticker-badge{position:absolute;left:8px;top:50%;transform:translateY(-50%);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:20px;z-index:2;white-space:nowrap}
 .cat-normal .ticker-badge{background:#1a3a20;color:#4ade80}
 .cat-urgent .ticker-badge{background:#4a1a1a;color:#f87171}
 .cat-closed .ticker-badge{background:#3a2a10;color:#fbbf24}
 .cat-alees .ticker-badge{background:#3a2a10;color:#fbbf24}
 .ticker-track{display:flex;white-space:nowrap;width:max-content;will-change:transform;animation:ticker-scroll linear infinite;padding-left:90px}
-.ticker-item{padding-right:100px;font-size:14px;font-weight:600;letter-spacing:.02em}
+.ticker-item{padding-right:80px;font-size:13px;font-weight:600;letter-spacing:.02em}
 .cat-normal .ticker-item{color:#4ade80}
 .cat-urgent .ticker-item{color:#f87171}
 .cat-closed .ticker-item{color:#26D3F6}
@@ -62,7 +63,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-s
 .grid{display:grid;gap:10px;flex:1;min-height:0}
 .booth{background:#111827;border-radius:8px;overflow:hidden;border:1.5px solid #1e2a40;border-top:3px solid transparent;display:flex;flex-direction:column;transition:opacity .4s}
 .booth.offline{opacity:.5;filter:grayscale(.6)}
-.booth-header{background:#1a2235;padding:7px 12px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.booth-header{background:#1a2235;padding:6px 10px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .booth-left{display:flex;align-items:center;gap:8px;min-width:0}
 .booth-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
 .booth-name{color:#94aacf;font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -71,20 +72,46 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-s
 .offline-tag{font-size:10px;color:#888;display:none}
 .booth.offline .offline-tag{display:inline}
 .booth.offline .booth-status{animation:none;background:#555!important}
-.frame-wrap{flex:1;min-height:0;position:relative}
+.frame-wrap{flex:1;min-height:0;position:relative;-webkit-overflow-scrolling:touch}
 .frame-wrap iframe{width:100%;height:100%;border:none;display:block;background:#fff}
 .no-url{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:#3d5070}
 .no-url i{font-size:32px}
 .no-url p{font-size:13px}
 
-/* Mobile responsive */
+/* ── MOBILE RESPONSIVE ── */
 @media(max-width:600px){
-  .root{padding:7px;gap:6px}
-  .title{font-size:15px}
+  .root{padding:6px;gap:5px}
+
+  /* Header: stack title/subtitle vertically, keep badge+btn */
+  .header{align-items:flex-start}
+  .header-left{flex-direction:column;gap:2px;align-items:flex-start}
+  .title{font-size:14px;letter-spacing:0}
+  .election-label{font-size:11px}
+  .live-badge{font-size:10px;padding:3px 8px}
+  .dot{width:6px;height:6px}
+  .fs-btn{width:28px;height:28px;font-size:13px}
+
+  /* Agg bar: stack stats row + progress bar vertically */
+  .agg-bar{flex-direction:column;padding:8px 10px;gap:7px}
+  .agg-stats-row{width:100%}
+  .agg-stat{padding:0 6px}
   .agg-val{font-size:16px}
   .agg-lbl{font-size:9px}
-  .ticker-item{font-size:13px}
+  .agg-progress-wrap{width:100%;padding:0;min-width:unset}
+  .agg-track{height:7px}
+
+  /* Ticker smaller */
+  .ticker-item{font-size:12px}
+  .ticker-badge{font-size:9px;padding:2px 6px}
+  .ticker-track{padding-left:80px}
+  .ticker-item{padding-right:60px}
+
+  /* Grid: single column on mobile */
+  .grid{gap:7px}
   .booth-name{font-size:12px}
+  .booth-header{padding:5px 9px}
+  .booth-dot{width:8px;height:8px}
+  .booth-status{width:7px;height:7px}
 }
 </style>
 </head>
@@ -103,9 +130,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-s
   </div>
 
   <div class="agg-bar hidden" id="aggBar">
-    <div class="agg-stat"><div class="agg-val" id="aggPolled">—</div><div class="agg-lbl">Votes Cast</div></div>
-    <div class="agg-stat"><div class="agg-val" id="aggRemaining">—</div><div class="agg-lbl">Yet to Vote</div></div>
-    <div class="agg-stat"><div class="agg-val" id="aggTotal">—</div><div class="agg-lbl">Total Students</div></div>
+    <div class="agg-stats-row">
+      <div class="agg-stat"><div class="agg-val" id="aggPolled">—</div><div class="agg-lbl">Votes Cast</div></div>
+      <div class="agg-stat"><div class="agg-val" id="aggRemaining">—</div><div class="agg-lbl">Yet to Vote</div></div>
+      <div class="agg-stat"><div class="agg-val" id="aggTotal">—</div><div class="agg-lbl">Total Students</div></div>
+    </div>
     <div class="agg-progress-wrap">
       <div class="agg-pct" id="aggPct">0% Polled</div>
       <div class="agg-track"><div class="agg-fill" id="aggFill" style="width:0%"></div></div>
@@ -196,6 +225,8 @@ document.addEventListener("fullscreenchange", function(){
 
 /* ── Grid ── */
 function gridDimensions(n) {
+  var mobile = window.innerWidth <= 600;
+  if (mobile) return { cols: 1, rows: n };
   if (n <= 3) return { cols: n, rows: 1 };
   var cols = Math.ceil(Math.sqrt(n));
   return { cols: cols, rows: Math.ceil(n / cols) };
@@ -333,6 +364,10 @@ function pollApi() {
 
 /* ── Boot ── */
 buildGrid();
+window.addEventListener("resize", function(){
+  clearTimeout(window._resizeTimer);
+  window._resizeTimer = setTimeout(buildGrid, 200);
+});
 if (CONFIG.apiUrl) {
   pollApi();
   setInterval(pollApi, CONFIG.pollInterval * 1000);
