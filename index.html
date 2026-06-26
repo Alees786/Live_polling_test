@@ -257,11 +257,15 @@ function renderDonutCard(card, idx) {
   var total    = data.total  || 0;
   var remain   = Math.max(0, total - polled);
   var pct      = total > 0 ? Math.round(polled / total * 100) : 0;
-  var isClosed = data.status === "closed";
-
-  var statusBg   = isClosed ? "#3a1a1a" : "#0d2a14";
-  var statusCol  = isClosed ? "#f87171" : "#4ade80";
-  var statusText = isClosed ? "CLOSED"  : "OPEN";
+  var status = data.status || "live";
+  var statusBg, statusCol, statusText;
+  if (status === "closed") {
+    statusBg = "#3a1a1a"; statusCol = "#f87171"; statusText = "CLOSED";
+  } else if (status === "paused") {
+    statusBg = "#2a2000"; statusCol = "#fbbf24"; statusText = "⏸ PAUSED";
+  } else {
+    statusBg = "#0d2a14"; statusCol = "#4ade80"; statusText = "OPEN";
+  }
 
   card.innerHTML =
     /* Donut + stats row */
