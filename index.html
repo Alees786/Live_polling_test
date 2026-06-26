@@ -42,18 +42,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-s
 .ticker-wrap.cat-normal{background:#0d1f10;border:1.5px solid #1a3a20}
 .ticker-wrap.cat-urgent{background:#200e0e;border:1.5px solid #4a1a1a}
 .ticker-wrap.cat-closed{background:#1a1208;border:1.5px solid #3a2a10}
-.ticker-wrap.cat-alees{background:#1a1208;border:1.5px solid #3a2a10}
+.ticker-wrap.cat-alees{background:#1a0828;border:1.5px solid #4a1060}
 .ticker-badge{position:absolute;left:8px;top:50%;transform:translateY(-50%);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:20px;z-index:2;white-space:nowrap}
 .cat-normal .ticker-badge{background:#1a3a20;color:#4ade80}
 .cat-urgent .ticker-badge{background:#4a1a1a;color:#f87171}
 .cat-closed .ticker-badge{background:#3a2a10;color:#fbbf24}
-.cat-alees .ticker-badge{background:#3a2a10;color:#fbbf24}
+.cat-alees  .ticker-badge{background:#4a1060;color:#ff0066}
 .ticker-track{display:flex;white-space:nowrap;width:max-content;will-change:transform;animation:ticker-scroll linear infinite;padding-left:90px}
 .ticker-item{padding-right:80px;font-size:13px;font-weight:600;letter-spacing:.02em}
 .cat-normal .ticker-item{color:#4ade80}
 .cat-urgent .ticker-item{color:#f87171}
 .cat-closed .ticker-item{color:#26D3F6}
-.cat-alees .ticker-item{color:#ff0066}
+.cat-alees  .ticker-item{color:#ff0066}
 @keyframes ticker-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
 /* Grid */
@@ -74,8 +74,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-s
 
 /* iframe area */
 .frame-wrap{flex:1;min-height:0;position:relative;overflow:hidden}
-.frame-wrap iframe{width:100%;height:100%;border:none;display:block;background:#0a0e1a;
-  transform-origin:top left;}
+.frame-wrap iframe{width:100%;height:100%;border:none;display:block;background:#0a0e1a;transform-origin:top left;}
 .no-url{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:#3d5070}
 .no-url i{font-size:32px}
 .no-url p{font-size:13px}
@@ -208,9 +207,9 @@ var CONFIG = {
 
 var COLORS = ["#27ae60","#e67e22","#3498db","#e74c3c","#9b59b6",
               "#1abc9c","#f1c40f","#e84393","#2ecc71","#5d8aa8"];
-var CAT_LABELS = { normal:"INFO", urgent:"⚡ URGENT", closed:"CLOSED" };
+var CAT_LABELS = { normal:"INFO", urgent:"⚡ URGENT", closed:"CLOSED", alees:"★ LATEST" };
 
-/* Per-booth data store: { polled, total, status } */
+/* Per-booth data store: { polled, total, status, name } */
 var boothData = [];
 
 document.getElementById("electionTitle").textContent = CONFIG.title;
@@ -232,8 +231,8 @@ document.addEventListener("fullscreenchange", function(){
 /* ── SVG donut helper ── */
 function makeDonut(polled, total, color, size) {
   size = size || 72;
-  var r   = (size - 10) / 2;
-  var cx  = size / 2, cy = size / 2;
+  var r    = (size - 10) / 2;
+  var cx   = size / 2, cy = size / 2;
   var circ = 2 * Math.PI * r;
   var pct  = total > 0 ? polled / total : 0;
   var dash = pct * circ;
@@ -252,12 +251,12 @@ function makeDonut(polled, total, color, size) {
 
 /* ── Render donut card ── */
 function renderDonutCard(card, idx) {
-  var color  = COLORS[idx % COLORS.length];
-  var data   = boothData[idx] || { polled: 0, total: 0, status: "live" };
-  var polled = data.polled || 0;
-  var total  = data.total  || 0;
-  var remain = Math.max(0, total - polled);
-  var pct    = total > 0 ? Math.round(polled / total * 100) : 0;
+  var color    = COLORS[idx % COLORS.length];
+  var data     = boothData[idx] || { polled: 0, total: 0, status: "live" };
+  var polled   = data.polled || 0;
+  var total    = data.total  || 0;
+  var remain   = Math.max(0, total - polled);
+  var pct      = total > 0 ? Math.round(polled / total * 100) : 0;
   var isClosed = data.status === "closed";
 
   var statusBg   = isClosed ? "#3a1a1a" : "#0d2a14";
@@ -325,9 +324,6 @@ function buildGrid() {
     el.className = "booth";
     el.style.borderTopColor = color;
 
-    /* Build donut card div */
-    var donutHtml = '<div class="donut-card" id="donut-' + i + '"></div>';
-
     el.innerHTML =
       '<div class="booth-header">' +
         '<div class="booth-left">' +
@@ -345,7 +341,7 @@ function buildGrid() {
             'sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>'
           : '<div class="no-url"><i class="ti ti-layout-board"></i><p>No URL configured</p></div>') +
       '</div>' +
-      donutHtml;
+      '<div class="donut-card" id="donut-' + i + '"></div>';
 
     grid.appendChild(el);
 
@@ -424,7 +420,7 @@ function pollApi() {
       showTicker(msg, cat);
     }).catch(function(){});
 
-  /* Aggregation totals */
+  /* Aggregation totals (driven from booth data now; kept for display) */
   fetch(base + sep + "action=totals&t=" + t, { cache:"no-store" })
     .then(function(r){ return r.json(); })
     .then(function(d){
@@ -438,31 +434,19 @@ function pollApi() {
       document.getElementById("aggBar").classList.remove("hidden");
     }).catch(function(){});
 
-  /* Per-booth data — tries ?action=booth_totals */
+  /* ── Per-booth totals — independent donut data from remote control ── */
   fetch(base + sep + "action=booth_totals&t=" + t, { cache:"no-store" })
     .then(function(r){ return r.json(); })
     .then(function(d){
-      /* Expects array: [{polled,total,status}, ...] matching booths order */
-      if (!Array.isArray(d)) return;
-      d.forEach(function(item, i){
+      if (!Array.isArray(d) || d.length === 0) return;
+      /* Update each booth donut independently with its own remote-control values */
+      d.forEach(function(item, i) {
         boothData[i] = item;
         var card = document.getElementById("donut-" + i);
         if (card) renderDonutCard(card, i);
       });
     }).catch(function(){
-      /* Fallback: distribute aggPolled evenly across booths */
-      var aggP = parseInt(document.getElementById("aggPolled").textContent) || 0;
-      var aggT = parseInt(document.getElementById("aggTotal").textContent)  || 0;
-      var n    = CONFIG.booths.length;
-      if (n > 0 && aggT > 0) {
-        var perBooth = Math.round(aggT / n);
-        var perPolled = Math.round(aggP / n);
-        CONFIG.booths.forEach(function(_, i){
-          boothData[i] = { polled: perPolled, total: perBooth, status: "live" };
-          var card = document.getElementById("donut-" + i);
-          if (card) renderDonutCard(card, i);
-        });
-      }
+      /* If booth_totals not available, leave existing boothData alone */
     });
 }
 
