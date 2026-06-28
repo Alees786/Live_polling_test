@@ -542,18 +542,80 @@ if (CONFIG.apiUrl) {
 
   var lastAudioTs = 0;
   var audioCtx = null;
+  var audioUnlocked = false;
 
   var SLOT_COLORS = ["#1e4a8a","#7c2d12","#14532d","#713f12","#4a1d96",
                      "#1e3a5f","#5c1a1a","#0f3d2e","#3d2a00","#2d1b69"];
 
   var BUILTIN_NAMES = ["🔔 Break Bell","⚡ Alert","🎵 Fanfare","📢 Announcement Ding","🎶 Chime"];
 
-  /* ── AudioContext ── */
+  /* ── AudioContext — create and always resume ── */
   function getCtx() {
-    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    if (audioCtx.state === "suspended") audioCtx.resume();
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtx.state === "suspended") {
+      audioCtx.resume();
+    }
     return audioCtx;
   }
+
+  /* ── Unlock audio — must be called from a real user click ── */
+  function unlockAudio() {
+    if (audioUnlocked) return;
+    try {
+      var ctx = getCtx();
+      /* Play a silent buffer to fully unlock */
+      var buf = ctx.createBuffer(1, 1, 22050);
+      var src = ctx.createBufferSource();
+      src.buffer = buf;
+      src.connect(ctx.destination);
+      src.start(0);
+      audioUnlocked = true;
+      hideUnlockBtn();
+      showToast("🔊 Audio enabled!");
+    } catch(e) {
+      console.error("Audio unlock failed:", e);
+    }
+  }
+
+  /* ── Unlock button on display page ── */
+  function showUnlockBtn() {
+    var existing = document.getElementById("audioUnlockBtn");
+    if (existing) return;
+    var btn = document.createElement("button");
+    btn.id = "audioUnlockBtn";
+    btn.textContent = "🔊 Click to Enable Audio";
+    btn.style.cssText = "position:fixed;bottom:20px;left:50%;transform:translateX(-50%);"
+      + "background:#1e4a8a;color:#c8dcf4;border:none;border-radius:10px;"
+      + "padding:12px 28px;font-size:15px;font-weight:700;cursor:pointer;"
+      + "z-index:998;box-shadow:0 4px 20px rgba(0,0,0,.5);"
+      + "animation:pulse-btn 1.5s infinite";
+    /* Add pulse animation */
+    if (!document.getElementById("audioUnlockStyle")) {
+      var style = document.createElement("style");
+      style.id = "audioUnlockStyle";
+      style.textContent = "@keyframes pulse-btn{0%,100%{box-shadow:0 4px 20px rgba(30,74,138,.4)}50%{box-shadow:0 4px 30px rgba(30,74,138,.9),0 0 0 6px rgba(30,74,138,.2)}}";
+      document.head.appendChild(style);
+    }
+    btn.addEventListener("click", function() {
+      unlockAudio();
+    });
+    document.body.appendChild(btn);
+  }
+
+  function hideUnlockBtn() {
+    var btn = document.getElementById("audioUnlockBtn");
+    if (btn) btn.remove();
+  }
+
+  /* Show unlock button on load */
+  showUnlockBtn();
+
+  /* Also unlock on any click anywhere on the page */
+  document.addEventListener("click", function() {
+    if (!audioUnlocked) unlockAudio();
+  });
 
   /* ── Built-in sounds ── */
   function playBuiltIn(slot) {
@@ -622,10 +684,10 @@ if (CONFIG.apiUrl) {
 
   /* ── Custom MP3/WAV from localStorage ── */
   function playCustom(slot) {
-    var idx = slot - 1; /* 0-based */
+    var idx = slot - 1;
     var data = localStorage.getItem("audio_slot_" + idx);
     if (!data) {
-      showToast("⚠ Slot " + slot + ": no audio loaded. Open setup (Ctrl+Shift+A)");
+      showToast("⚠ Slot " + slot + ": no audio loaded. Press Ctrl+Shift+A");
       return;
     }
     var audio = new Audio(data);
@@ -634,15 +696,18 @@ if (CONFIG.apiUrl) {
 
   /* ── Dispatch ── */
   function playSlot(slot) {
+    if (!audioUnlocked) {
+      showToast("⚠ Click '🔊 Click to Enable Audio' button first!");
+      return;
+    }
     if (slot >= 1 && slot <= 5) playBuiltIn(slot);
     else playCustom(slot);
-    /* Get label from localStorage */
     var labels = getLabels();
     var name = labels[slot-1] || ("Sound " + slot);
     showToast("▶ " + name);
   }
 
-  /* ── Labels stored in localStorage ── */
+  /* ── Labels in localStorage ── */
   function getLabels() {
     try { return JSON.parse(localStorage.getItem("audio_labels") || "[]"); } catch(e){ return []; }
   }
@@ -664,23 +729,24 @@ if (CONFIG.apiUrl) {
   /* ── Poll API every 2s ── */
   var lastLabels = [];
   function pollAudio() {
+    /* Always try to resume context in case it got suspended */
+    if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
+
     var base = CONFIG.apiUrl;
     var sep  = base.indexOf("?") > -1 ? "&" : "?";
     fetch(base + sep + "action=audio_cmd&t=" + Date.now(), { cache:"no-store" })
       .then(function(r){ return r.json(); })
       .then(function(d){
-        /* Play if new command */
         if (d.slot && d.ts && d.ts > lastAudioTs) {
           lastAudioTs = d.ts;
           playSlot(d.slot);
         }
-        /* Sync labels from API if different from local */
         if (Array.isArray(d.labels) && d.labels.length > 0) {
           var remote = JSON.stringify(d.labels);
           if (remote !== JSON.stringify(lastLabels)) {
             lastLabels = d.labels;
             saveLabels(d.labels);
-            buildSetupPanel(); /* refresh panel if open */
+            buildSetupPanel();
           }
         }
       }).catch(function(){});
@@ -694,7 +760,6 @@ if (CONFIG.apiUrl) {
     var defaultLabels = BUILTIN_NAMES.concat(["Custom 6","Custom 7","Custom 8","Custom 9","Custom 10"]);
     while (labels.length < 10) labels.push(defaultLabels[labels.length]);
 
-    /* Built-in slots 1–5 */
     var bDiv = document.getElementById("asBuiltinSlots");
     if (!bDiv) return;
     bDiv.innerHTML = "";
@@ -712,7 +777,6 @@ if (CONFIG.apiUrl) {
       bDiv.appendChild(row);
     }
 
-    /* Custom slots 6–10 */
     var cDiv = document.getElementById("asCustomSlots");
     cDiv.innerHTML = "";
     for (var j = 5; j < 10; j++) {
@@ -734,7 +798,6 @@ if (CONFIG.apiUrl) {
       cDiv.appendChild(row2);
     }
 
-    /* Attach events */
     document.querySelectorAll(".label-inp").forEach(function(inp){
       inp.addEventListener("change", saveAllLabels);
       inp.addEventListener("blur", saveAllLabels);
@@ -751,7 +814,7 @@ if (CONFIG.apiUrl) {
           try {
             localStorage.setItem("audio_slot_" + slot, e.target.result);
             showToast("✓ Slot " + (slot+1) + " loaded");
-            buildSetupPanel(); /* refresh */
+            buildSetupPanel();
           } catch(err) { showToast("⚠ Storage full — try a smaller file"); }
         };
         reader.readAsDataURL(file);
@@ -767,6 +830,7 @@ if (CONFIG.apiUrl) {
     });
     document.querySelectorAll(".as-test-btn").forEach(function(btn){
       btn.addEventListener("click", function(){
+        unlockAudio();
         playSlot(parseInt(btn.dataset.slot));
       });
     });
@@ -777,7 +841,6 @@ if (CONFIG.apiUrl) {
     var arr = [];
     inputs.forEach(function(inp){ arr.push(inp.value || ("Slot "+(parseInt(inp.dataset.slot)+1))); });
     saveLabels(arr);
-    /* Also push to API so remote control buttons update */
     fetch(CONFIG.apiUrl + (CONFIG.apiUrl.indexOf("?")>-1?"&":"?")
       + "action=setaudiolabels&labels="+encodeURIComponent(JSON.stringify(arr))+"&t="+Date.now())
       .catch(function(){});
@@ -800,7 +863,6 @@ if (CONFIG.apiUrl) {
   document.getElementById("asClose").addEventListener("click", closeSetup);
   document.getElementById("asClose2").addEventListener("click", closeSetup);
 
-  /* Export labels */
   document.getElementById("asExport").addEventListener("click", function(){
     var labels = getLabels();
     var blob = new Blob([JSON.stringify({labels:labels},null,2)], {type:"application/json"});
@@ -808,7 +870,6 @@ if (CONFIG.apiUrl) {
     a.download = "audio_labels.json"; a.click();
   });
 
-  /* Import labels */
   document.getElementById("asImportBtn").addEventListener("click", function(){
     document.getElementById("asImportFile").click();
   });
@@ -838,12 +899,6 @@ if (CONFIG.apiUrl) {
       else openSetup();
     }
   });
-
-  /* Warm up AudioContext on first click */
-  document.addEventListener("click", function warmUp(){
-    try { getCtx().resume(); } catch(e){}
-    document.removeEventListener("click", warmUp);
-  }, { once: true });
 
   /* Start polling */
   setInterval(pollAudio, 2000);
