@@ -99,39 +99,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-s
 .booth-status-row{display:flex;align-items:center;gap:6px}
 .booth-status-pill{font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;letter-spacing:.04em}
 
-/* ── AUDIO SETUP OVERLAY ── */
-/* Opened by pressing Ctrl+Shift+A on the display PC */
-#audioSetup{position:fixed;inset:0;background:rgba(5,8,20,.96);z-index:990;display:none;flex-direction:column;overflow-y:auto}
-#audioSetup.open{display:flex}
-.as-header{background:#111827;border-bottom:1.5px solid #1e2a40;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.as-title{font-size:16px;font-weight:700;color:#e8ecf4}
-.as-close{background:#1a2235;border:1px solid #2a3a55;color:#7a9bbf;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:600}
-.as-close:hover{background:#1f2d45;color:#c8d8f0}
-.as-body{padding:20px;max-width:640px;width:100%;margin:0 auto}
-.as-info{background:#0d1520;border:1px solid #1e2a40;border-radius:8px;padding:12px 14px;font-size:12px;color:#5a7090;margin-bottom:18px;line-height:1.6}
-.as-info b{color:#94aacf}
-.as-section{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#5a7090;margin:18px 0 10px}
-.as-slot{background:#0d1520;border:1px solid #1e2a40;border-radius:10px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.as-num{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;flex-shrink:0}
-.as-name{flex:1;min-width:100px;font-size:13px;font-weight:600;color:#c8d8f0}
-.as-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;white-space:nowrap}
-.as-badge.builtin{background:#1a3a20;color:#4ade80}
-.as-badge.loaded{background:#1a2050;color:#93c5fd}
-.as-badge.empty{background:#2a1a1a;color:#f87171}
-.as-file{display:none}/* hidden file input */
-.as-upload-btn{background:#1a2a40;border:1px solid #2a3a55;color:#94aacf;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;white-space:nowrap}
-.as-upload-btn:hover{background:#1f3550;color:#c8d8f0}
-.as-remove-btn{background:#2a1a1a;border:1px solid #3a2020;color:#f87171;padding:6px 10px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600}
-.as-test-btn{background:#0d2a14;border:1px solid #1a3a20;color:#4ade80;padding:6px 10px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600}
-.as-bottom{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
-.as-btn{flex:1;padding:11px;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;min-width:120px}
-.as-btn-export{background:#1a3a20;color:#4ade80;border:1px solid #1a3a20}
-.as-btn-import{background:#1a2050;color:#93c5fd;border:1px solid #1a2050}
-.as-btn-close{background:#1e4a8a;color:#c8dcf4}
-/* Audio toast */
-#audioToast{position:fixed;bottom:24px;right:24px;background:#111827;border:1.5px solid #1e2a40;color:#4ade80;font-size:13px;font-weight:600;padding:10px 18px;border-radius:10px;z-index:999;opacity:0;transition:opacity .35s;pointer-events:none;max-width:280px}
-#audioToast.show{opacity:1}
-
 /* ── MOBILE ── */
 @media(max-width:600px){
   .root{padding:6px;gap:5px}
@@ -204,38 +171,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-s
   <div class="grid" id="grid"></div>
 
 </div>
-
-<!-- ══ AUDIO SETUP OVERLAY (Ctrl+Shift+A to open) ══ -->
-<div id="audioSetup">
-  <div class="as-header">
-    <span class="as-title">🔊 Audio Setup</span>
-    <button class="as-close" id="asClose">✕ Close (Ctrl+Shift+A)</button>
-  </div>
-  <div class="as-body">
-    <div class="as-info">
-      <b>This panel is only visible on this PC.</b> Upload MP3/WAV files to each slot. Files are stored in Chrome's localStorage — they stay saved even after refreshing.<br>
-      Slots 1–5 use built-in synthesised sounds (no upload needed).<br>
-      Slots 6–10 need your own audio files (max 8 MB each).<br>
-      <b>Shortcut:</b> Press <b>Ctrl+Shift+A</b> to open/close this panel anytime.
-    </div>
-
-    <div class="as-section">Built-in Sounds (Slots 1–5)</div>
-    <div id="asBuiltinSlots"></div>
-
-    <div class="as-section">Custom Audio (Slots 6–10) — Upload your MP3 / WAV</div>
-    <div id="asCustomSlots"></div>
-
-    <div class="as-bottom">
-      <button class="as-btn as-btn-export" id="asExport">⬇ Export label backup</button>
-      <button class="as-btn as-btn-import" id="asImportBtn">⬆ Import label backup</button>
-      <input type="file" id="asImportFile" accept=".json" style="display:none">
-      <button class="as-btn as-btn-close" id="asClose2">Done</button>
-    </div>
-  </div>
-</div>
-
-<!-- Audio toast notification -->
-<div id="audioToast"></div>
 
 <script>
 /* ╔══════════════════════════════════════════════════════════╗
@@ -467,63 +402,56 @@ function showTicker(msg, cat, speed) {
   track.style.animation = "ticker-scroll " + secs + "s linear infinite";
 }
 
-/* ── JSONP helper — works cross-origin (GitHub Pages → Apps Script) ── */
-function jsonp(url, callbackName, fn) {
-  var script = document.createElement("script");
-  var cbKey  = callbackName + "_" + Date.now() + "_" + Math.floor(Math.random()*10000);
-  window[cbKey] = function(data) {
-    try { fn(data); } catch(e){}
-    delete window[cbKey];
-    if (script.parentNode) script.parentNode.removeChild(script);
-  };
-  var sep = url.indexOf("?") > -1 ? "&" : "?";
-  script.src = url + sep + "callback=" + cbKey + "&t=" + Date.now();
-  script.onerror = function() {
-    delete window[cbKey];
-    if (script.parentNode) script.parentNode.removeChild(script);
-  };
-  document.head.appendChild(script);
-}
-
 /* ── API polling ── */
 function pollApi() {
   if (!CONFIG.apiUrl) return;
   var base = CONFIG.apiUrl;
+  var sep  = base.indexOf("?") > -1 ? "&" : "?";
+  var t    = Date.now();
 
   /* Ticker */
-  jsonp(base + "?action=get", "cb_get", function(d) {
-    var msg = d.message || "", cat = d.category || "normal";
-    if (Array.isArray(d.scheduled)) {
-      var now  = new Date();
-      var hhmm = now.getHours().toString().padStart(2,"0") + ":" +
-                 now.getMinutes().toString().padStart(2,"0");
-      var hit  = d.scheduled.find(function(s){ return s.at === hhmm; });
-      if (hit) { msg = hit.message || msg; cat = hit.category || cat; }
-    }
-    showTicker(msg, cat);
-  });
+  fetch(base + sep + "action=get&t=" + t, { cache:"no-store" })
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      var msg = d.message || "", cat = d.category || "normal";
+      if (Array.isArray(d.scheduled)) {
+        var now  = new Date();
+        var hhmm = now.getHours().toString().padStart(2,"0") + ":" +
+                   now.getMinutes().toString().padStart(2,"0");
+        var hit  = d.scheduled.find(function(s){ return s.at === hhmm; });
+        if (hit) { msg = hit.message || msg; cat = hit.category || cat; }
+      }
+      showTicker(msg, cat);
+    }).catch(function(){});
 
-  /* Aggregation totals */
-  jsonp(base + "?action=totals", "cb_totals", function(d) {
-    if (typeof d.polled !== "number" || typeof d.total !== "number") return;
-    var pct = d.total > 0 ? Math.round(d.polled / d.total * 100) : 0;
-    document.getElementById("aggPolled").textContent    = d.polled;
-    document.getElementById("aggRemaining").textContent = Math.max(0, d.total - d.polled);
-    document.getElementById("aggTotal").textContent     = d.total;
-    document.getElementById("aggPct").textContent       = pct + "% Polled";
-    document.getElementById("aggFill").style.width      = pct + "%";
-    document.getElementById("aggBar").classList.remove("hidden");
-  });
+  /* Aggregation totals (driven from booth data now; kept for display) */
+  fetch(base + sep + "action=totals&t=" + t, { cache:"no-store" })
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if (typeof d.polled !== "number" || typeof d.total !== "number") return;
+      var pct = d.total > 0 ? Math.round(d.polled / d.total * 100) : 0;
+      document.getElementById("aggPolled").textContent    = d.polled;
+      document.getElementById("aggRemaining").textContent = Math.max(0, d.total - d.polled);
+      document.getElementById("aggTotal").textContent     = d.total;
+      document.getElementById("aggPct").textContent       = pct + "% Polled";
+      document.getElementById("aggFill").style.width      = pct + "%";
+      document.getElementById("aggBar").classList.remove("hidden");
+    }).catch(function(){});
 
-  /* Per-booth totals */
-  jsonp(base + "?action=booth_totals", "cb_booth", function(d) {
-    if (!Array.isArray(d) || d.length === 0) return;
-    d.forEach(function(item, i) {
-      boothData[i] = item;
-      var card = document.getElementById("donut-" + i);
-      if (card) renderDonutCard(card, i);
+  /* ── Per-booth totals — independent donut data from remote control ── */
+  fetch(base + sep + "action=booth_totals&t=" + t, { cache:"no-store" })
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if (!Array.isArray(d) || d.length === 0) return;
+      /* Update each booth donut independently with its own remote-control values */
+      d.forEach(function(item, i) {
+        boothData[i] = item;
+        var card = document.getElementById("donut-" + i);
+        if (card) renderDonutCard(card, i);
+      });
+    }).catch(function(){
+      /* If booth_totals not available, leave existing boothData alone */
     });
-  });
 }
 
 /* ── Boot ── */
@@ -536,377 +464,6 @@ if (CONFIG.apiUrl) {
   pollApi();
   setInterval(pollApi, CONFIG.pollInterval * 1000);
 }
-
-/* ══════════════════════════════════════════════════════════
-   AUDIO ENGINE — display PC only
-   - Polls ?action=audio_cmd every 2 seconds
-   - Slots 1–5: built-in Web Audio synthesis
-   - Slots 6–10: user MP3/WAV stored in localStorage
-   - Setup panel: Ctrl+Shift+A
-   ══════════════════════════════════════════════════════════ */
-(function(){
-  if (!CONFIG.apiUrl) return;
-
-  var lastAudioTs = 0;
-  var audioCtx = null;
-  var audioUnlocked = false;
-
-  var SLOT_COLORS = ["#1e4a8a","#7c2d12","#14532d","#713f12","#4a1d96",
-                     "#1e3a5f","#5c1a1a","#0f3d2e","#3d2a00","#2d1b69"];
-
-  var BUILTIN_NAMES = ["🔔 Break Bell","⚡ Alert","🎵 Fanfare","📢 Announcement Ding","🎶 Chime"];
-
-  /* ── AudioContext — create and always resume ── */
-  function getCtx() {
-    if (!audioCtx) {
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    }
-    if (audioCtx.state === "suspended") {
-      audioCtx.resume();
-    }
-    return audioCtx;
-  }
-
-  /* ── Unlock audio — must be called from a real user click ── */
-  function unlockAudio() {
-    if (audioUnlocked) return;
-    try {
-      var ctx = getCtx();
-      /* Play a silent buffer to fully unlock */
-      var buf = ctx.createBuffer(1, 1, 22050);
-      var src = ctx.createBufferSource();
-      src.buffer = buf;
-      src.connect(ctx.destination);
-      src.start(0);
-      audioUnlocked = true;
-      hideUnlockBtn();
-      showToast("🔊 Audio enabled!");
-    } catch(e) {
-      console.error("Audio unlock failed:", e);
-    }
-  }
-
-  /* ── Unlock button on display page ── */
-  function showUnlockBtn() {
-    var existing = document.getElementById("audioUnlockBtn");
-    if (existing) return;
-    var btn = document.createElement("button");
-    btn.id = "audioUnlockBtn";
-    btn.textContent = "🔊 Click to Enable Audio";
-    btn.style.cssText = "position:fixed;bottom:20px;left:50%;transform:translateX(-50%);"
-      + "background:#1e4a8a;color:#c8dcf4;border:none;border-radius:10px;"
-      + "padding:12px 28px;font-size:15px;font-weight:700;cursor:pointer;"
-      + "z-index:998;box-shadow:0 4px 20px rgba(0,0,0,.5);"
-      + "animation:pulse-btn 1.5s infinite";
-    /* Add pulse animation */
-    if (!document.getElementById("audioUnlockStyle")) {
-      var style = document.createElement("style");
-      style.id = "audioUnlockStyle";
-      style.textContent = "@keyframes pulse-btn{0%,100%{box-shadow:0 4px 20px rgba(30,74,138,.4)}50%{box-shadow:0 4px 30px rgba(30,74,138,.9),0 0 0 6px rgba(30,74,138,.2)}}";
-      document.head.appendChild(style);
-    }
-    btn.addEventListener("click", function() {
-      unlockAudio();
-    });
-    document.body.appendChild(btn);
-  }
-
-  function hideUnlockBtn() {
-    var btn = document.getElementById("audioUnlockBtn");
-    if (btn) btn.remove();
-  }
-
-  /* Show unlock button on load */
-  showUnlockBtn();
-
-  /* Also unlock on any click anywhere on the page */
-  document.addEventListener("click", function() {
-    if (!audioUnlocked) unlockAudio();
-  });
-
-  /* ── Built-in sounds ── */
-  function playBuiltIn(slot) {
-    var ctx = getCtx();
-    var now = ctx.currentTime;
-
-    if (slot === 1) {
-      /* School Bell — 3 resonant dings */
-      [0, 0.5, 1.0].forEach(function(t) {
-        var o = ctx.createOscillator(), g = ctx.createGain();
-        o.connect(g); g.connect(ctx.destination);
-        o.type = "sine";
-        o.frequency.setValueAtTime(880, now+t);
-        o.frequency.exponentialRampToValueAtTime(440, now+t+1.2);
-        g.gain.setValueAtTime(0.55, now+t);
-        g.gain.exponentialRampToValueAtTime(0.001, now+t+1.4);
-        o.start(now+t); o.stop(now+t+1.5);
-      });
-
-    } else if (slot === 2) {
-      /* Alert — urgent two-tone */
-      [[880,0],[660,0.28],[880,0.56],[660,0.84]].forEach(function(p) {
-        var o = ctx.createOscillator(), g = ctx.createGain();
-        o.connect(g); g.connect(ctx.destination);
-        o.type = "square"; o.frequency.value = p[0];
-        g.gain.setValueAtTime(0.25, now+p[1]);
-        g.gain.exponentialRampToValueAtTime(0.001, now+p[1]+0.24);
-        o.start(now+p[1]); o.stop(now+p[1]+0.27);
-      });
-
-    } else if (slot === 3) {
-      /* Fanfare — ascending chime */
-      [523,659,784,1047].forEach(function(freq, i) {
-        var o = ctx.createOscillator(), g = ctx.createGain();
-        o.connect(g); g.connect(ctx.destination);
-        o.type = "triangle"; o.frequency.value = freq;
-        g.gain.setValueAtTime(0, now+i*0.18);
-        g.gain.linearRampToValueAtTime(0.45, now+i*0.18+0.05);
-        g.gain.exponentialRampToValueAtTime(0.001, now+i*0.18+0.75);
-        o.start(now+i*0.18); o.stop(now+i*0.18+0.8);
-      });
-
-    } else if (slot === 4) {
-      /* Announcement ding — warm single chime */
-      var o = ctx.createOscillator(), g = ctx.createGain();
-      o.connect(g); g.connect(ctx.destination);
-      o.type = "sine";
-      o.frequency.setValueAtTime(1047, now);
-      o.frequency.exponentialRampToValueAtTime(523, now+1.5);
-      g.gain.setValueAtTime(0.65, now);
-      g.gain.exponentialRampToValueAtTime(0.001, now+2.0);
-      o.start(now); o.stop(now+2.0);
-
-    } else if (slot === 5) {
-      /* Chime — pleasant two-note */
-      [[784,0],[1047,0.3]].forEach(function(p) {
-        var o = ctx.createOscillator(), g = ctx.createGain();
-        o.connect(g); g.connect(ctx.destination);
-        o.type = "sine"; o.frequency.value = p[0];
-        g.gain.setValueAtTime(0.5, now+p[1]);
-        g.gain.exponentialRampToValueAtTime(0.001, now+p[1]+1.0);
-        o.start(now+p[1]); o.stop(now+p[1]+1.1);
-      });
-    }
-  }
-
-  /* ── Custom MP3/WAV from localStorage ── */
-  function playCustom(slot) {
-    var idx = slot - 1;
-    var data = localStorage.getItem("audio_slot_" + idx);
-    if (!data) {
-      showToast("⚠ Slot " + slot + ": no audio loaded. Press Ctrl+Shift+A");
-      return;
-    }
-    var audio = new Audio(data);
-    audio.play().catch(function(e){ showToast("⚠ Playback error: " + e.message); });
-  }
-
-  /* ── Dispatch ── */
-  function playSlot(slot) {
-    if (!audioUnlocked) {
-      showToast("⚠ Click '🔊 Click to Enable Audio' button first!");
-      return;
-    }
-    if (slot >= 1 && slot <= 5) playBuiltIn(slot);
-    else playCustom(slot);
-    var labels = getLabels();
-    var name = labels[slot-1] || ("Sound " + slot);
-    showToast("▶ " + name);
-  }
-
-  /* ── Labels in localStorage ── */
-  function getLabels() {
-    try { return JSON.parse(localStorage.getItem("audio_labels") || "[]"); } catch(e){ return []; }
-  }
-  function saveLabels(arr) {
-    localStorage.setItem("audio_labels", JSON.stringify(arr));
-  }
-
-  /* ── Toast ── */
-  var toastTimer;
-  function showToast(msg) {
-    var el = document.getElementById("audioToast");
-    if (!el) return;
-    el.textContent = msg;
-    el.classList.add("show");
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(function(){ el.classList.remove("show"); }, 2800);
-  }
-
-  /* ── Poll API every 2s ── */
-  var lastLabels = [];
-  function pollAudio() {
-    /* Always try to resume context in case it got suspended */
-    if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
-
-    jsonp(CONFIG.apiUrl + "?action=audio_cmd", "cb_audio", function(d) {
-      if (d.slot && d.ts && d.ts > lastAudioTs) {
-        lastAudioTs = d.ts;
-        playSlot(d.slot);
-      }
-      if (Array.isArray(d.labels) && d.labels.length > 0) {
-        var remote = JSON.stringify(d.labels);
-        if (remote !== JSON.stringify(lastLabels)) {
-          lastLabels = d.labels;
-          saveLabels(d.labels);
-          buildSetupPanel();
-        }
-      }
-    });
-  }
-
-  /* ══════════════════════════════════════
-     AUDIO SETUP PANEL
-  ══════════════════════════════════════ */
-  function buildSetupPanel() {
-    var labels = getLabels();
-    var defaultLabels = BUILTIN_NAMES.concat(["Custom 6","Custom 7","Custom 8","Custom 9","Custom 10"]);
-    while (labels.length < 10) labels.push(defaultLabels[labels.length]);
-
-    var bDiv = document.getElementById("asBuiltinSlots");
-    if (!bDiv) return;
-    bDiv.innerHTML = "";
-    for (var i = 0; i < 5; i++) {
-      var lbl = labels[i] || BUILTIN_NAMES[i];
-      var row = document.createElement("div");
-      row.className = "as-slot";
-      row.innerHTML =
-        '<div class="as-num" style="background:'+SLOT_COLORS[i]+'">'+(i+1)+'</div>'
-        +'<div class="as-name"><input type="text" style="background:transparent;border:none;color:#c8d8f0;font-size:13px;font-weight:600;width:100%;outline:none" '
-        +  'value="'+escHtml(lbl)+'" data-slot="'+i+'" class="label-inp" placeholder="Button name">'
-        +'</div>'
-        +'<span class="as-badge builtin">✓ Built-in</span>'
-        +'<button class="as-test-btn" data-slot="'+(i+1)+'">▶ Test</button>';
-      bDiv.appendChild(row);
-    }
-
-    var cDiv = document.getElementById("asCustomSlots");
-    cDiv.innerHTML = "";
-    for (var j = 5; j < 10; j++) {
-      var lbl2 = labels[j] || ("Custom " + (j+1));
-      var hasFile = !!localStorage.getItem("audio_slot_" + j);
-      var row2 = document.createElement("div");
-      row2.className = "as-slot";
-      row2.dataset.slotIdx = j;
-      row2.innerHTML =
-        '<div class="as-num" style="background:'+SLOT_COLORS[j]+'">'+(j+1)+'</div>'
-        +'<div class="as-name"><input type="text" style="background:transparent;border:none;color:#c8d8f0;font-size:13px;font-weight:600;width:100%;outline:none" '
-        +  'value="'+escHtml(lbl2)+'" data-slot="'+j+'" class="label-inp" placeholder="Button name">'
-        +'</div>'
-        +'<span class="as-badge '+(hasFile?"loaded":"empty")+'" id="as-badge-'+j+'">'+(hasFile?"✓ Loaded":"No file")+'</span>'
-        +'<input type="file" accept="audio/*" class="as-file" id="as-file-'+j+'" data-slot="'+j+'">'
-        +'<button class="as-upload-btn" onclick="document.getElementById(\'as-file-'+j+'\').click()">📁 Upload</button>'
-        +(hasFile ? '<button class="as-remove-btn" data-slot="'+j+'">✕</button>' : '')
-        +(hasFile ? '<button class="as-test-btn" data-slot="'+(j+1)+'">▶ Test</button>' : '');
-      cDiv.appendChild(row2);
-    }
-
-    document.querySelectorAll(".label-inp").forEach(function(inp){
-      inp.addEventListener("change", saveAllLabels);
-      inp.addEventListener("blur", saveAllLabels);
-    });
-    document.querySelectorAll(".as-file").forEach(function(inp){
-      inp.addEventListener("change", function(){
-        var slot = parseInt(inp.dataset.slot);
-        var file = inp.files[0]; if (!file) return;
-        if (file.size > 8 * 1024 * 1024) { showToast("⚠ File too large — max 8 MB"); return; }
-        var badge = document.getElementById("as-badge-"+slot);
-        if (badge) { badge.textContent = "Reading…"; badge.className = "as-badge"; }
-        var reader = new FileReader();
-        reader.onload = function(e) {
-          try {
-            localStorage.setItem("audio_slot_" + slot, e.target.result);
-            showToast("✓ Slot " + (slot+1) + " loaded");
-            buildSetupPanel();
-          } catch(err) { showToast("⚠ Storage full — try a smaller file"); }
-        };
-        reader.readAsDataURL(file);
-      });
-    });
-    document.querySelectorAll(".as-remove-btn").forEach(function(btn){
-      btn.addEventListener("click", function(){
-        var slot = parseInt(btn.dataset.slot);
-        localStorage.removeItem("audio_slot_" + slot);
-        showToast("Slot " + (slot+1) + " cleared");
-        buildSetupPanel();
-      });
-    });
-    document.querySelectorAll(".as-test-btn").forEach(function(btn){
-      btn.addEventListener("click", function(){
-        unlockAudio();
-        playSlot(parseInt(btn.dataset.slot));
-      });
-    });
-  }
-
-  function saveAllLabels() {
-    var inputs = document.querySelectorAll(".label-inp");
-    var arr = [];
-    inputs.forEach(function(inp){ arr.push(inp.value || ("Slot "+(parseInt(inp.dataset.slot)+1))); });
-    saveLabels(arr);
-    /* Use jsonp for label save — no response needed */
-    jsonp(CONFIG.apiUrl + "?action=setaudiolabels&labels=" + encodeURIComponent(JSON.stringify(arr)), "cb_lblsave", function(){});
-  }
-
-  function escHtml(s) {
-    return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-  }
-
-  /* ── Setup panel open/close ── */
-  function openSetup() {
-    buildSetupPanel();
-    document.getElementById("audioSetup").classList.add("open");
-  }
-  function closeSetup() {
-    saveAllLabels();
-    document.getElementById("audioSetup").classList.remove("open");
-  }
-
-  document.getElementById("asClose").addEventListener("click", closeSetup);
-  document.getElementById("asClose2").addEventListener("click", closeSetup);
-
-  document.getElementById("asExport").addEventListener("click", function(){
-    var labels = getLabels();
-    var blob = new Blob([JSON.stringify({labels:labels},null,2)], {type:"application/json"});
-    var a = document.createElement("a"); a.href = URL.createObjectURL(blob);
-    a.download = "audio_labels.json"; a.click();
-  });
-
-  document.getElementById("asImportBtn").addEventListener("click", function(){
-    document.getElementById("asImportFile").click();
-  });
-  document.getElementById("asImportFile").addEventListener("change", function(){
-    var file = this.files[0]; if(!file) return;
-    var reader = new FileReader();
-    reader.onload = function(e){
-      try {
-        var data = JSON.parse(e.target.result);
-        if (Array.isArray(data.labels)) {
-          saveLabels(data.labels);
-          buildSetupPanel();
-          showToast("✓ Labels imported");
-        }
-      } catch(err) { showToast("⚠ Invalid JSON file"); }
-    };
-    reader.readAsText(file);
-    this.value = "";
-  });
-
-  /* Keyboard shortcut Ctrl+Shift+A */
-  document.addEventListener("keydown", function(e){
-    if (e.ctrlKey && e.shiftKey && e.key === "A") {
-      e.preventDefault();
-      var panel = document.getElementById("audioSetup");
-      if (panel.classList.contains("open")) closeSetup();
-      else openSetup();
-    }
-  });
-
-  /* Start polling */
-  setInterval(pollAudio, 2000);
-  pollAudio();
-
-})(); /* end audio engine */
 </script>
 </body>
 </html>
