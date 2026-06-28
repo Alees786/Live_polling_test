@@ -467,56 +467,63 @@ function showTicker(msg, cat, speed) {
   track.style.animation = "ticker-scroll " + secs + "s linear infinite";
 }
 
+/* ── JSONP helper — works cross-origin (GitHub Pages → Apps Script) ── */
+function jsonp(url, callbackName, fn) {
+  var script = document.createElement("script");
+  var cbKey  = callbackName + "_" + Date.now() + "_" + Math.floor(Math.random()*10000);
+  window[cbKey] = function(data) {
+    try { fn(data); } catch(e){}
+    delete window[cbKey];
+    if (script.parentNode) script.parentNode.removeChild(script);
+  };
+  var sep = url.indexOf("?") > -1 ? "&" : "?";
+  script.src = url + sep + "callback=" + cbKey + "&t=" + Date.now();
+  script.onerror = function() {
+    delete window[cbKey];
+    if (script.parentNode) script.parentNode.removeChild(script);
+  };
+  document.head.appendChild(script);
+}
+
 /* ── API polling ── */
 function pollApi() {
   if (!CONFIG.apiUrl) return;
   var base = CONFIG.apiUrl;
-  var sep  = base.indexOf("?") > -1 ? "&" : "?";
-  var t    = Date.now();
 
   /* Ticker */
-  fetch(base + sep + "action=get&t=" + t, { cache:"no-store" })
-    .then(function(r){ return r.json(); })
-    .then(function(d){
-      var msg = d.message || "", cat = d.category || "normal";
-      if (Array.isArray(d.scheduled)) {
-        var now  = new Date();
-        var hhmm = now.getHours().toString().padStart(2,"0") + ":" +
-                   now.getMinutes().toString().padStart(2,"0");
-        var hit  = d.scheduled.find(function(s){ return s.at === hhmm; });
-        if (hit) { msg = hit.message || msg; cat = hit.category || cat; }
-      }
-      showTicker(msg, cat);
-    }).catch(function(){});
+  jsonp(base + "?action=get", "cb_get", function(d) {
+    var msg = d.message || "", cat = d.category || "normal";
+    if (Array.isArray(d.scheduled)) {
+      var now  = new Date();
+      var hhmm = now.getHours().toString().padStart(2,"0") + ":" +
+                 now.getMinutes().toString().padStart(2,"0");
+      var hit  = d.scheduled.find(function(s){ return s.at === hhmm; });
+      if (hit) { msg = hit.message || msg; cat = hit.category || cat; }
+    }
+    showTicker(msg, cat);
+  });
 
-  /* Aggregation totals (driven from booth data now; kept for display) */
-  fetch(base + sep + "action=totals&t=" + t, { cache:"no-store" })
-    .then(function(r){ return r.json(); })
-    .then(function(d){
-      if (typeof d.polled !== "number" || typeof d.total !== "number") return;
-      var pct = d.total > 0 ? Math.round(d.polled / d.total * 100) : 0;
-      document.getElementById("aggPolled").textContent    = d.polled;
-      document.getElementById("aggRemaining").textContent = Math.max(0, d.total - d.polled);
-      document.getElementById("aggTotal").textContent     = d.total;
-      document.getElementById("aggPct").textContent       = pct + "% Polled";
-      document.getElementById("aggFill").style.width      = pct + "%";
-      document.getElementById("aggBar").classList.remove("hidden");
-    }).catch(function(){});
+  /* Aggregation totals */
+  jsonp(base + "?action=totals", "cb_totals", function(d) {
+    if (typeof d.polled !== "number" || typeof d.total !== "number") return;
+    var pct = d.total > 0 ? Math.round(d.polled / d.total * 100) : 0;
+    document.getElementById("aggPolled").textContent    = d.polled;
+    document.getElementById("aggRemaining").textContent = Math.max(0, d.total - d.polled);
+    document.getElementById("aggTotal").textContent     = d.total;
+    document.getElementById("aggPct").textContent       = pct + "% Polled";
+    document.getElementById("aggFill").style.width      = pct + "%";
+    document.getElementById("aggBar").classList.remove("hidden");
+  });
 
-  /* ── Per-booth totals — independent donut data from remote control ── */
-  fetch(base + sep + "action=booth_totals&t=" + t, { cache:"no-store" })
-    .then(function(r){ return r.json(); })
-    .then(function(d){
-      if (!Array.isArray(d) || d.length === 0) return;
-      /* Update each booth donut independently with its own remote-control values */
-      d.forEach(function(item, i) {
-        boothData[i] = item;
-        var card = document.getElementById("donut-" + i);
-        if (card) renderDonutCard(card, i);
-      });
-    }).catch(function(){
-      /* If booth_totals not available, leave existing boothData alone */
+  /* Per-booth totals */
+  jsonp(base + "?action=booth_totals", "cb_booth", function(d) {
+    if (!Array.isArray(d) || d.length === 0) return;
+    d.forEach(function(item, i) {
+      boothData[i] = item;
+      var card = document.getElementById("donut-" + i);
+      if (card) renderDonutCard(card, i);
     });
+  });
 }
 
 /* ── Boot ── */
@@ -732,24 +739,20 @@ if (CONFIG.apiUrl) {
     /* Always try to resume context in case it got suspended */
     if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
 
-    var base = CONFIG.apiUrl;
-    var sep  = base.indexOf("?") > -1 ? "&" : "?";
-    fetch(base + sep + "action=audio_cmd&t=" + Date.now(), { cache:"no-store" })
-      .then(function(r){ return r.json(); })
-      .then(function(d){
-        if (d.slot && d.ts && d.ts > lastAudioTs) {
-          lastAudioTs = d.ts;
-          playSlot(d.slot);
+    jsonp(CONFIG.apiUrl + "?action=audio_cmd", "cb_audio", function(d) {
+      if (d.slot && d.ts && d.ts > lastAudioTs) {
+        lastAudioTs = d.ts;
+        playSlot(d.slot);
+      }
+      if (Array.isArray(d.labels) && d.labels.length > 0) {
+        var remote = JSON.stringify(d.labels);
+        if (remote !== JSON.stringify(lastLabels)) {
+          lastLabels = d.labels;
+          saveLabels(d.labels);
+          buildSetupPanel();
         }
-        if (Array.isArray(d.labels) && d.labels.length > 0) {
-          var remote = JSON.stringify(d.labels);
-          if (remote !== JSON.stringify(lastLabels)) {
-            lastLabels = d.labels;
-            saveLabels(d.labels);
-            buildSetupPanel();
-          }
-        }
-      }).catch(function(){});
+      }
+    });
   }
 
   /* ══════════════════════════════════════
@@ -841,9 +844,8 @@ if (CONFIG.apiUrl) {
     var arr = [];
     inputs.forEach(function(inp){ arr.push(inp.value || ("Slot "+(parseInt(inp.dataset.slot)+1))); });
     saveLabels(arr);
-    fetch(CONFIG.apiUrl + (CONFIG.apiUrl.indexOf("?")>-1?"&":"?")
-      + "action=setaudiolabels&labels="+encodeURIComponent(JSON.stringify(arr))+"&t="+Date.now())
-      .catch(function(){});
+    /* Use jsonp for label save — no response needed */
+    jsonp(CONFIG.apiUrl + "?action=setaudiolabels&labels=" + encodeURIComponent(JSON.stringify(arr)), "cb_lblsave", function(){});
   }
 
   function escHtml(s) {
