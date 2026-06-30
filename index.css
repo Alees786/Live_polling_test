@@ -120,6 +120,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-s
   .booth-dot{width:8px;height:8px}
   .booth-status{width:7px;height:7px}
 
+  
   /* On mobile: hide iframe, show donut card */
   .frame-wrap{display:none}
   .donut-card{display:flex}
