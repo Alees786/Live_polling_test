@@ -9,7 +9,7 @@ var CONFIG = {
   booths: [
     {
       name: "Booth 1",
-      url:  "https://script.google.com/macros/s/AKfycby_I7JIfaoIUpuyHBfCn-Sar0SK0nKBH65JCc4i2Qc7H8wwohusbtUenW3AwjYuqbk6/exec?page=polling"
+      url:  "https://script.google.com/macros/s/AKfycbzIJVC0akr45t3C-DfiCtyvKtf0kt-VeRioxj22sGZz-Bkv3pbUXPShkBrdQKNR33Z5/exec?page=polling"
     },
     {
       name: "Booth 2",
@@ -17,7 +17,7 @@ var CONFIG = {
     },
     {
       name: "Booth 3",
-      url:  "https://script.google.com/macros/s/AKfycbyViynneHWRuBHKmXNPPs7C5MRarBhZRRkzHh7pp9sNXUT9WQGAVdHljIfj13euCXV6/exec?page=polling"
+      url:  "https://script.google.com/macros/s/AKfycbwfAoYZrKSaqYq9gA5YBgOGbjyqlngt1-7tzo6etU_7IcnBHCrq14IcJCLpAzWSpUKMhw/exec?page=polling"
     }
   ],
 
