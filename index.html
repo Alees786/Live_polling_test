@@ -2,453 +2,698 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Nusrath Secondary School — Election Results Temporarily Closed</title>
-<meta name="description" content="This page is temporarily closed for maintenance.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nusrath School Parliament Election 2026-27 — Results Published</title>
+<meta name="description" content="Official notice: the Nusrath School Student Parliament Election 2026-27 has concluded and results are now published.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,380;0,9..144,520;0,9..144,600;1,9..144,500;1,9..144,600&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg: #0b0d12;
-    --bg-2: #14171f;
-    --bg-3: #1b1f29;
-    --ink: #eae6da;
-    --ink-dim: #8b8779;
-    --ink-faint: #55534a;
-    --amber: #e8934a;
-    --amber-soft: rgba(232,147,74,0.16);
-    --rust: #c1443a;
-    --rust-soft: rgba(193,68,58,0.18);
-    --mono: 'JetBrains Mono', ui-monospace, monospace;
-    --display: 'Fraunces', ui-serif, serif;
-    --clock-size: 208px;
+    --ink:      #0B1D33;
+    --paper:    #F6F2E8;
+    --paper-2:  #EFE9D9;
+    --red:      #A32638;
+    --gold:     #B8912F;
+    --green:    #3F6B4A;
+    --slate:    #5B6472;
+    --line:     #D9D2C0;
+    --serif: 'Source Serif 4', Georgia, serif;
+    --sans:  'IBM Plex Sans', -apple-system, sans-serif;
+    --mono:  'JetBrains Mono', ui-monospace, monospace;
   }
 
-  *{box-sizing:border-box;}
-  html,body{height:100%;}
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+  }
+
   body{
-    margin:0;
-    min-height:100vh;
-    background:
-      radial-gradient(ellipse 900px 600px at 18% 12%, rgba(232,147,74,0.07), transparent 60%),
-      radial-gradient(ellipse 700px 500px at 85% 85%, rgba(193,68,58,0.06), transparent 55%),
-      var(--bg);
-    color:var(--ink);
-    font-family:var(--mono);
-    overflow-x:hidden;
-    position:relative;
-    -webkit-font-smoothing:antialiased;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    overflow-x: hidden;
   }
 
-  /* ambient drifting grid */
-  .grid-bg{
-    position:fixed; inset:-10% -10% -10% -10%;
+  /* subtle paper texture */
+  body::before{
+    content:"";
+    position: fixed;
+    inset: 0;
     background-image:
-      linear-gradient(var(--bg-2) 1px, transparent 1px),
-      linear-gradient(90deg, var(--bg-2) 1px, transparent 1px);
-    background-size:64px 64px;
-    opacity:0.35;
-    mask-image:radial-gradient(ellipse 70% 60% at 50% 40%, black, transparent 85%);
-    animation: driftGrid 70s linear infinite;
-    pointer-events:none;
-    z-index:0;
-  }
-  @keyframes driftGrid{
-    from{ transform:translate(0,0); }
-    to{ transform:translate(64px,64px); }
+      radial-gradient(circle at 1px 1px, rgba(11,29,51,0.05) 1px, transparent 0);
+    background-size: 22px 22px;
+    pointer-events: none;
+    z-index: 0;
   }
 
-  /* grain overlay */
-  .grain{
-    position:fixed; inset:0; z-index:60; pointer-events:none;
-    opacity:0.05; mix-blend-mode:overlay;
-    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  .frame{
+    width: 100%;
+    max-width: 780px;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
   }
 
-  .wrap{
-    position:relative; z-index:2;
-    min-height:100vh;
-    display:flex; align-items:center;
-    padding: 8vh 7vw 8vh 7vw;
+  /* ---------- header bar ---------- */
+  header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px 0 20px;
+    border-bottom: 1px solid var(--line);
+    margin-top: 20px;
   }
 
-  .content{ max-width:640px; }
-
-  .reveal{
-    opacity:0;
-    animation: fadeUp 0.9s cubic-bezier(.2,.7,.3,1) forwards;
-  }
-  @keyframes fadeUp{
-    from{ opacity:0; transform:translateY(16px); }
-    to{ opacity:1; transform:translateY(0); }
-  }
-
-  .eyebrow-row{
-    display:flex; align-items:center; gap:14px;
-    flex-wrap:wrap;
-    margin-bottom: 28px;
-    animation-delay:.05s;
-  }
   .eyebrow{
-    font-size:12px; letter-spacing:0.22em; text-transform:uppercase;
-    color:var(--ink-dim); font-weight:500;
-  }
-  .status-pill{
-    display:inline-flex; align-items:center; gap:7px;
-    border:1px solid rgba(193,68,58,0.4);
-    background:var(--rust-soft);
-    color:#e88a83;
-    padding:4px 10px 4px 8px;
-    border-radius:999px;
-    font-size:11px; letter-spacing:0.14em;
-    font-weight:500;
-  }
-  .status-pill .dot{
-    width:6px; height:6px; border-radius:50%;
-    background:var(--rust);
-    box-shadow:0 0 0 0 rgba(193,68,58,0.6);
-    animation: pulseDotSm 1.8s ease-in-out infinite;
-  }
-  @keyframes pulseDotSm{
-    0%,100%{ box-shadow:0 0 0 0 rgba(193,68,58,0.55); }
-    50%{ box-shadow:0 0 0 5px rgba(193,68,58,0); }
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--red);
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
 
-  .disconnect-icon{ display:block; margin-bottom:26px; animation-delay:.12s; }
-  .node{ fill:var(--bg-3); stroke:var(--ink-faint); stroke-width:1.5; }
-  .wire{ stroke:var(--ink-faint); stroke-width:1.5; stroke-dasharray:4 4; }
-  .pulse-ring{ fill:none; stroke:var(--rust); stroke-width:1.2; opacity:0; animation:ringOut 2.2s ease-out infinite; }
-  @keyframes ringOut{
-    0%{ opacity:0.55; r:5; }
-    80%{ opacity:0; r:16; }
-    100%{ opacity:0; r:16; }
-  }
-  .pulse-dot{ fill:var(--rust); animation:pulseDot 2.2s ease-in-out infinite; }
-  @keyframes pulseDot{ 0%,100%{ opacity:0.55; } 50%{ opacity:1; } }
-  .break-x{ stroke:var(--rust); stroke-width:2; stroke-linecap:round; }
-
-  h1.headline{
-    font-family:var(--display);
-    font-weight:520;
-    font-size:clamp(2.1rem, 5.4vw, 3.6rem);
-    line-height:1.08;
-    letter-spacing:-0.01em;
-    margin:0 0 20px 0;
-    color:var(--ink);
-    animation-delay:.2s;
-  }
-  h1.headline em{
-    font-style:italic;
-    font-weight:500;
-    color:var(--amber);
+  .eyebrow .dot{
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--red);
+    display: inline-block;
   }
 
-  .sub{
-    font-family:var(--mono);
-    font-size:14.5px;
-    line-height:1.7;
-    color:var(--ink-dim);
-    max-width:46ch;
-    margin:0 0 40px 0;
-    animation-delay:.3s;
+  .clock{
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--slate);
+    letter-spacing: 0.04em;
+    text-align: right;
   }
 
-  .terminal{
-    background:linear-gradient(180deg, var(--bg-3), var(--bg-2));
-    border:1px solid rgba(255,255,255,0.06);
-    border-radius:10px;
-    overflow:hidden;
-    box-shadow: 0 30px 60px -20px rgba(0,0,0,0.55);
-    max-width:520px;
-    animation-delay:.42s;
-  }
-  .term-bar{
-    display:flex; align-items:center; gap:8px;
-    padding:10px 14px;
-    background:rgba(255,255,255,0.03);
-    border-bottom:1px solid rgba(255,255,255,0.06);
-  }
-  .term-bar .tdot{ width:9px; height:9px; border-radius:50%; opacity:0.55; }
-  .tdot.r{ background:#c1443a; } .tdot.y{ background:#e8934a; } .tdot.g{ background:#5c8a5c; }
-  .term-title{
-    margin-left:6px; font-size:11px; color:var(--ink-faint); letter-spacing:0.08em;
-  }
-  .term-body{ padding:16px 18px 20px 18px; font-size:13px; line-height:1.85; }
-  .term-body .line{ opacity:0; animation:fadeUp 0.5s ease forwards; white-space:pre-wrap; }
-  .term-body .l1{ animation-delay:.7s; }
-  .term-body .l2{ animation-delay:.95s; }
-  .term-body .l3{ animation-delay:1.15s; }
-  .term-body .l4{ animation-delay:1.45s; }
-  .term-body .l5{ animation-delay:1.7s; }
-  .term-body .l6{ animation-delay:1.95s; }
-  .term-body .l7{ animation-delay:2.2s; }
-  .prompt{ color:var(--amber); }
-  .cmd{ color:var(--ink); }
-  .out{ color:var(--ink-dim); }
-  .err{ color:#d3766c; }
-  .cursor{ color:var(--amber); animation:blink 1s step-end infinite; }
-  @keyframes blink{ 50%{ opacity:0; } }
-
-  .footer-note{
-    margin-top:28px;
-    font-size:12px; color:var(--ink-faint);
-    letter-spacing:0.03em;
-    animation-delay:2.45s;
-  }
-  .footer-note .br{ color:var(--ink-dim); }
-
-  /* ---- draggable analogue clock ---- */
-  .clock-wrap{
-    position:fixed;
-    right:6.5vw; bottom:8vh;
-    width:var(--clock-size); height:var(--clock-size);
-    z-index:40;
-    touch-action:none;
-    cursor:grab;
-    animation: fadeUp 0.9s cubic-bezier(.2,.7,.3,1) forwards, floaty 6s ease-in-out infinite;
-    animation-delay: .6s, 1.5s;
-    filter: drop-shadow(0 22px 34px rgba(0,0,0,0.5));
-  }
-  .clock-wrap.dragging{ cursor:grabbing; animation:none; transition:none; }
-  @keyframes floaty{
-    0%,100%{ transform:translateY(0); }
-    50%{ transform:translateY(-9px); }
+  /* ---------- hero / stamp ---------- */
+  .hero{
+    position: relative;
+    text-align: center;
+    padding: 88px 0 56px;
   }
 
-  .clock-hint{
-    position:absolute; top:-30px; left:50%; transform:translateX(-50%);
-    font-size:10.5px; letter-spacing:0.14em; text-transform:uppercase;
-    color:var(--ink-faint); white-space:nowrap;
-    opacity:1; transition:opacity 0.6s ease;
-    pointer-events:none;
-  }
-  .clock-hint.hidden{ opacity:0; }
-
-  .clock-bezel{
-    position:relative; width:100%; height:100%; border-radius:50%;
-    background:
-      radial-gradient(circle at 32% 28%, rgba(255,255,255,0.05), transparent 55%),
-      linear-gradient(160deg, var(--bg-3), var(--bg-2) 60%, #0e1017);
-    border:1px solid rgba(255,255,255,0.08);
-    box-shadow:
-      inset 0 0 0 1px rgba(0,0,0,0.4),
-      inset 0 10px 24px rgba(0,0,0,0.5),
-      inset 0 -6px 14px rgba(255,255,255,0.03);
+  .hero .kicker{
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--slate);
+    margin: 0 0 18px;
+    opacity: 0;
+    animation: rise 0.7s ease-out 0.15s forwards;
   }
 
-  .radar-sweep{
-    position:absolute; inset:6%; border-radius:50%;
-    background:conic-gradient(from 0deg, var(--amber-soft) 0deg, transparent 26deg 360deg);
-    animation: spinSweep 5s linear infinite;
-    opacity:0.7;
-    mix-blend-mode:screen;
-  }
-  @keyframes spinSweep{ to{ transform:rotate(360deg); } }
-
-  .ticks{ position:absolute; inset:0; }
-  .tick{
-    position:absolute; left:calc(50% - 1px); top:8%;
-    width:1.5px; height:5%;
-    background:var(--ink-faint);
-    transform-origin: 0.75px calc(var(--clock-size) * 0.42);
-  }
-  .tick.hour{ height:9%; width:2px; background:var(--ink-dim); top:6%; }
-
-  .num{
-    position:absolute; font-family:var(--mono); font-size:11px; color:var(--ink-faint);
-    letter-spacing:0.02em;
-  }
-  .num.n12{ top:16%; left:50%; transform:translate(-50%,-50%); }
-  .num.n3{ top:50%; right:15%; transform:translate(50%,-50%); }
-  .num.n6{ bottom:14%; left:50%; transform:translate(-50%,50%); }
-  .num.n9{ top:50%; left:15%; transform:translate(-50%,-50%); }
-
-  .hand{
-    position:absolute; left:50%; bottom:50%;
-    transform-origin:50% 100%;
-    border-radius:3px;
-    background:var(--ink);
-  }
-  .hand.hour{ width:4px; height:26%; margin-left:-2px; background:var(--ink); }
-  .hand.minute{ width:3px; height:36%; margin-left:-1.5px; background:var(--ink); }
-  .hand.second{ width:1.5px; height:40%; margin-left:-0.75px; background:var(--amber); }
-  .hub{
-    position:absolute; top:50%; left:50%; width:9px; height:9px; margin:-4.5px 0 0 -4.5px;
-    border-radius:50%; background:var(--amber); box-shadow:0 0 0 3px var(--bg-2);
+  h1{
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: clamp(34px, 6vw, 56px);
+    line-height: 1.08;
+    margin: 0 0 22px;
+    letter-spacing: -0.01em;
+    opacity: 0;
+    animation: rise 0.7s ease-out 0.3s forwards;
   }
 
-  .clock-readout{
-    position:absolute; left:50%; bottom:-30px; transform:translateX(-50%);
-    font-size:11px; letter-spacing:0.05em; color:var(--ink-dim);
-    white-space:nowrap;
+  .lede{
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--slate);
+    max-width: 480px;
+    margin: 0 auto;
+    opacity: 0;
+    animation: rise 0.7s ease-out 0.45s forwards;
   }
 
-  @media (max-width: 860px){
-    .wrap{ padding:8vh 6vw 30vh 6vw; align-items:flex-start; }
-    :root{ --clock-size:150px; }
-    .clock-wrap{ right:50%; transform:translateX(50%); bottom:5vh; }
-    .content{ max-width:100%; }
+  @keyframes rise{
+    from{ opacity: 0; transform: translateY(14px); }
+    to{ opacity: 1; transform: translateY(0); }
+  }
+
+  /* ---------- the stamp ---------- */
+  .stamp-wrap{
+    position: absolute;
+    top: 4px;
+    left: 50%;
+    width: 230px;
+    height: 230px;
+    margin-left: -230px;
+    transform: translateX(0);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  @media (min-width: 620px){
+    .stamp-wrap{ margin-left: -280px; top: -10px; }
+  }
+
+  .stamp{
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transform: translate(40px,-30px) rotate(-26deg) scale(2.4);
+    animation: stampDown 0.55s cubic-bezier(.36,1.9,.55,1) 0.85s forwards;
+    filter: url(#inkTexture);
+  }
+
+  @keyframes stampDown{
+    0%{ opacity: 0; transform: translate(40px,-30px) rotate(-26deg) scale(2.4); }
+    55%{ opacity: 1; transform: translate(0,0) rotate(-10deg) scale(0.94); }
+    75%{ transform: translate(0,0) rotate(-14deg) scale(1.04); }
+    100%{ opacity: 1; transform: translate(0,0) rotate(-12deg) scale(1); }
+  }
+
+  .stamp-flash{
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(63,107,74,0.2), transparent 70%);
+    opacity: 0;
+    animation: flash 0.4s ease-out 1.32s forwards;
+  }
+
+  @keyframes flash{
+    0%{ opacity: 0; transform: scale(0.6); }
+    40%{ opacity: 1; transform: scale(1.1); }
+    100%{ opacity: 0; transform: scale(1.3); }
+  }
+
+  /* ---------- info cards ---------- */
+  .cards{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    margin-bottom: 40px;
+    opacity: 0;
+    animation: rise 0.7s ease-out 1.5s forwards;
+  }
+
+  .card{
+    background: var(--paper);
+    padding: 22px 16px;
+    text-align: center;
+  }
+
+  .card .label{
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--slate);
+    margin: 0 0 10px;
+  }
+
+  .card .value{
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--ink);
+    margin: 0;
+  }
+
+  .card .value.red{ color: var(--red); }
+  .card .value.green{ color: var(--green); }
+
+  .badge{
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--green);
+    border: 1px solid var(--green);
+    border-radius: 999px;
+    padding: 3px 10px 3px 8px;
+    margin-top: 8px;
+  }
+
+  .badge .dot{
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--green);
+    display: inline-block;
+  }
+
+  /* ---------- notice panel ---------- */
+  .panel{
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--gold);
+    background: var(--paper-2);
+    padding: 22px 24px;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: rise 0.7s ease-out 1.65s forwards;
+  }
+
+  .panel h2{
+    font-family: var(--serif);
+    font-size: 16px;
+    margin: 0 0 8px;
+  }
+
+  .panel p{
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--slate);
+    margin: 0;
+  }
+
+  /* ---------- progress / timeline ---------- */
+  .timeline{
+    margin-bottom: 56px;
+    opacity: 0;
+    animation: rise 0.7s ease-out 1.8s forwards;
+  }
+
+  .timeline .rule{
+    position: relative;
+    height: 3px;
+    background: var(--line);
+    border-radius: 2px;
+    overflow: hidden;
+    margin: 22px 0 10px;
+  }
+
+  .timeline .fill{
+    position: absolute;
+    inset: 0;
+    width: 0%;
+    background: linear-gradient(90deg, var(--gold), var(--green));
+    border-radius: 2px;
+    animation: fillBar 1.4s ease-out 2s forwards;
+  }
+
+  @keyframes fillBar{
+    to{ width: 100%; }
+  }
+
+  .timeline .marks{
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--slate);
+  }
+
+  .timeline .marks span.end{ color: var(--green); font-weight: 500; }
+
+  /* ---------- results table ---------- */
+  .results{
+    margin-bottom: 40px;
+    opacity: 0;
+    animation: rise 0.7s ease-out 1.5s forwards;
+  }
+
+  .results h2{
+    font-family: var(--serif);
+    font-size: 20px;
+    margin: 0 0 4px;
+  }
+
+  .results .sub{
+    font-size: 13px;
+    color: var(--slate);
+    margin: 0 0 18px;
+  }
+
+  .race{
+    border: 1px solid var(--line);
+    margin-bottom: 14px;
+  }
+
+  .race-head{
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 14px 18px;
+    background: var(--paper-2);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .race-head .role{
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--slate);
+  }
+
+  .race-head .turnout{
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--slate);
+  }
+
+  .candidate{
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .candidate:last-child{ border-bottom: none; }
+
+  .candidate .rank{
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--slate);
+    width: 16px;
+  }
+
+  .candidate.winner .rank{ color: var(--green); }
+
+  .candidate .name{
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .candidate.winner .name::after{
+    content: "Winner";
+    margin-left: 8px;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--green);
+    border: 1px solid var(--green);
+    border-radius: 999px;
+    padding: 1px 7px;
+    vertical-align: middle;
+  }
+
+  .candidate.deputy .rank{ color: var(--gold); }
+
+  .candidate.deputy .name::after{
+    content: "Deputy";
+    margin-left: 8px;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    border-radius: 999px;
+    padding: 1px 7px;
+    vertical-align: middle;
+  }
+
+  .candidate.deputy .bar-fill{ background: var(--gold); }
+
+  .candidate .pct{
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--ink);
+    min-width: 44px;
+    text-align: right;
+  }
+
+  .candidate .bar{
+    width: 80px;
+    height: 5px;
+    background: var(--line);
+    border-radius: 3px;
+    overflow: hidden;
+    justify-self: end;
+  }
+
+  .candidate .bar-fill{
+    height: 100%;
+    background: var(--slate);
+    border-radius: 3px;
+    width: 0%;
+    animation: growBar 1s ease-out 2.1s forwards;
+  }
+
+  .candidate.winner .bar-fill{ background: var(--green); }
+
+  @keyframes growBar{ to{ width: var(--pct); } }
+
+  @media (max-width: 480px){
+    .candidate{ grid-template-columns: auto 1fr auto; }
+    .candidate .bar{ display: none; }
+  }
+
+  .cta-row{
+    display: flex;
+    justify-content: center;
+    margin: 28px 0 44px;
+    opacity: 0;
+    animation: rise 0.7s ease-out 1.9s forwards;
+  }
+
+  .cta{
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--paper);
+    background: var(--ink);
+    border: 1px solid var(--ink);
+    padding: 13px 26px;
+    text-decoration: none;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .cta:hover{ background: var(--paper); color: var(--ink); }
+
+  /* ---------- footer ---------- */
+  footer{
+    width: 100%;
+    border-top: 1px solid var(--line);
+    padding: 22px 0 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--slate);
+    opacity: 0;
+    animation: rise 0.7s ease-out 1.95s forwards;
+  }
+
+  footer a{
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--gold);
+  }
+
+  footer a:hover{ color: var(--red); border-color: var(--red); }
+
+  .seal-mark{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--ink);
+  }
+
+  .seal-mark svg{ width: 18px; height: 18px; }
+
+  @media (max-width: 520px){
+    .cards{ grid-template-columns: 1fr; }
+    .card{ border-bottom: 1px solid var(--line); }
+    header{ flex-direction: column; align-items: flex-start; gap: 8px; }
+    .clock{ text-align: left; }
   }
 
   @media (prefers-reduced-motion: reduce){
-    *, *::before, *::after{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; }
-    .grid-bg, .radar-sweep, .clock-wrap{ animation:none !important; }
+    *{ animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+    .stamp{ transform: translate(0,0) rotate(-12deg) scale(1); }
   }
 </style>
 </head>
 <body>
 
-  <div class="grid-bg"></div>
-  <div class="grain"></div>
+<svg width="0" height="0" style="position:absolute">
+  <filter id="inkTexture" x="-20%" y="-20%" width="140%" height="140%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" result="noise" seed="7"/>
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="4" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
 
-  <main class="wrap">
-    <div class="content">
+<div class="frame">
 
-      <div class="eyebrow-row reveal">
-        <span class="eyebrow">Nusrath Secondary School Randathani</span>
-        <span class="status-pill"><span class="dot"></span>Closed</span>
-      </div>
+  <header>
+    <div class="eyebrow"><span class="dot"></span>Nusrath School Parliament Election 2026-27</div>
+    <div class="clock" id="clock">Loading time…</div>
+  </header>
 
-      <svg class="disconnect-icon reveal" width="150" height="46" viewBox="0 0 150 46" aria-hidden="true">
-        <rect x="4" y="14" width="18" height="18" rx="3" class="node"/>
-        <rect x="128" y="14" width="18" height="18" rx="3" class="node"/>
-        <line x1="22" y1="23" x2="63" y2="23" class="wire"/>
-        <line x1="87" y1="23" x2="128" y2="23" class="wire"/>
-        <circle cx="75" cy="23" r="4" class="pulse-ring"/>
-        <circle cx="75" cy="23" r="3" class="pulse-dot"/>
-        <path d="M71 19 L79 27 M79 19 L71 27" class="break-x"/>
+  <section class="hero">
+    <div class="stamp-wrap">
+      <svg class="stamp" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="110" cy="110" r="98" fill="none" stroke="var(--green)" stroke-width="5"/>
+        <circle cx="110" cy="110" r="86" fill="none" stroke="var(--green)" stroke-width="1.5"/>
+        <path id="stampArcTop" d="M 30 110 A 80 80 0 0 1 190 110" fill="none"/>
+        <path id="stampArcBottom" d="M 190 112 A 80 80 0 0 1 30 112" fill="none"/>
+        <text font-family="'JetBrains Mono', monospace" font-size="12" font-weight="500" letter-spacing="3" fill="var(--green)">
+          <textPath href="#stampArcTop" startOffset="50%" text-anchor="middle">NUSRATH SCHOOL</textPath>
+        </text>
+        <text font-family="'JetBrains Mono', monospace" font-size="12" font-weight="500" letter-spacing="3" fill="var(--green)">
+          <textPath href="#stampArcBottom" startOffset="50%" text-anchor="middle">CERTIFIED · 7/5/2026</textPath>
+        </text>
+        <text x="110" y="104" text-anchor="middle" font-family="'Source Serif 4', serif" font-weight="700" font-size="30" fill="var(--green)">RESULTS</text>
+        <text x="110" y="140" text-anchor="middle" font-family="'Source Serif 4', serif" font-weight="700" font-size="30" fill="var(--green)">PUBLISHED</text>
       </svg>
-
-      <h1 class="headline reveal">This page is<br><em>temporarily closed</em></h1>
-
-      <p class="sub reveal">Student Parliament Election 2026‑27 results are currently unavailable while we sort things out. Please check back shortly.</p>
-
-      <div class="terminal reveal">
-        <div class="term-bar">
-          <span class="tdot r"></span><span class="tdot y"></span><span class="tdot g"></span>
-          <span class="term-title">notice — election results</span>
-        </div>
-        <div class="term-body">
-          <div class="line l1"><span class="prompt">School</span> <span class="cmd">Nusrath Secondary School Randathani</span></div>
-          <div class="line out l2">Election: Student Parliament Election</div>
-          <div class="line l3"><span class="prompt">Year</span> <span class="cmd">2026 – 27</span></div>
-          <div class="line err l4">Status: results page temporarily closed</div>
-          <div class="line l5"><span class="prompt">Note</span> <span class="cmd">This page is temporarily closed</span></div>
-          <div class="line l6">— Alees</div>
-          <div class="line l7"><span class="prompt">$</span> <span class="cursor">▌</span></div>
-        </div>
-      </div>
-
-      <div class="footer-note reveal"><span class="br">Nusrath Secondary School Randathani</span> · Student Parliament Election 2026‑27</div>
-
+      <div class="stamp-flash"></div>
     </div>
-  </main>
 
-  <div class="clock-wrap" id="clockWrap" role="img" aria-label="Analogue clock showing the current system time. Draggable.">
-    <div class="clock-hint" id="clockHint">drag me</div>
-    <div class="clock-bezel">
-      <div class="radar-sweep"></div>
-      <div class="ticks" id="ticks"></div>
-      <span class="num n12">12</span>
-      <span class="num n3">3</span>
-      <span class="num n6">6</span>
-      <span class="num n9">9</span>
-      <div class="hand hour" id="hourHand"></div>
-      <div class="hand minute" id="minHand"></div>
-      <div class="hand second" id="secHand"></div>
-      <div class="hub"></div>
+    <p class="kicker">Nusrath School Student Parliament Election 2026-27</p>
+    <h1>Results Are Published</h1>
+    <p class="lede">
+      Voting across all 3 booths has concluded and the combined count has
+      been verified. Official results for all 4 posts are below. Thank
+      you to everyone who voted.
+    </p>
+  </section>
+
+  <div class="cards">
+    <div class="card">
+      <p class="label">Total Votes</p>
+      <p class="value" id="turnout">345</p>
     </div>
-    <div class="clock-readout" id="clockReadout">--:--:--</div>
+    <div class="card">
+      <p class="label">Booths</p>
+      <p class="value" id="publishTime">3</p>
+    </div>
+    <div class="card">
+      <p class="label">Status</p>
+      <p class="value green">Certified</p>
+      <span class="badge"><span class="dot"></span>7/5/2026</span>
+    </div>
   </div>
 
+  <div class="timeline">
+    <div class="marks">
+      <span>Voting</span>
+      <span>Counting</span>
+      <span class="end">Results Certified</span>
+    </div>
+    <div class="rule"><div class="fill"></div></div>
+  </div>
+
+  <div class="results">
+    <h2>Official Results</h2>
+    <p class="sub">Combined totals from all 3 booths, 4 posts, 12 candidates — final and certified by the Election Committee.</p>
+
+    <div class="race">
+      <div class="race-head">
+        <span class="role">Head Boy</span>
+        <span class="turnout">345 votes cast</span>
+      </div>
+      <div class="candidate winner">
+        <span class="rank">1</span>
+        <span class="name">Mohammad Midlaj. M</span>
+        <span class="pct">70%</span>
+        <span class="bar"><span class="bar-fill" style="--pct:70%"></span></span>
+      </div>
+    </div>
+
+    <div class="race">
+      <div class="race-head">
+        <span class="role">Head Girl</span>
+        <span class="turnout">345 votes cast</span>
+      </div>
+      <div class="candidate winner">
+        <span class="rank">1</span>
+        <span class="name">Sajva. K</span>
+        <span class="pct">47%</span>
+        <span class="bar"><span class="bar-fill" style="--pct:47%"></span></span>
+      </div>
+    </div>
+
+    <div class="race">
+      <div class="race-head">
+        <span class="role">Sports Minister</span>
+        <span class="turnout">345 votes cast</span>
+      </div>
+      <div class="candidate winner">
+        <span class="rank">1</span>
+        <span class="name">Sahil Mohamed. S</span>
+        <span class="pct">50%</span>
+        <span class="bar"><span class="bar-fill" style="--pct:50%"></span></span>
+      </div>
+      <div class="candidate deputy">
+        <span class="rank">2</span>
+        <span class="name">Mohamed Safwan</span>
+        <span class="pct">35%</span>
+        <span class="bar"><span class="bar-fill" style="--pct:35%"></span></span>
+      </div>
+    </div>
+
+    <div class="race">
+      <div class="race-head">
+        <span class="role">Arts Minister</span>
+        <span class="turnout">345 votes cast</span>
+      </div>
+      <div class="candidate winner">
+        <span class="rank">1</span>
+        <span class="name">Mohammed Bishr. M</span>
+        <span class="pct">57%</span>
+        <span class="bar"><span class="bar-fill" style="--pct:57%"></span></span>
+      </div>
+      <div class="candidate deputy">
+        <span class="rank">2</span>
+        <span class="name">Fathima Raifa. C.K</span>
+        <span class="pct">28%</span>
+        <span class="bar"><span class="bar-fill" style="--pct:28%"></span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>About this result</h2>
+    <p>
+      Counting was observed by student representatives from each
+      participating list. No disputes were raised during certification.
+    </p>
+  </div>
+
+  <footer>
+    <div class="seal-mark">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.4"/>
+        <path d="M8 12.5l2.5 2.5L16 9.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Certified by the Election Committee
+    </div>
+    <div>Questions? <a href="#">Contact the Election Committee</a></div>
+  </footer>
+
+</div>
+
 <script>
-  // build tick marks
-  (function buildTicks(){
-    const el = document.getElementById('ticks');
-    const frag = document.createDocumentFragment();
-    for(let i=0;i<60;i++){
-      const t = document.createElement('div');
-      t.className = 'tick' + (i%5===0 ? ' hour' : '');
-      t.style.transform = 'rotate(' + (i*6) + 'deg)';
-      frag.appendChild(t);
-    }
-    el.appendChild(frag);
-  })();
-
-  // live clock — smooth continuous hands
-  const hourHand = document.getElementById('hourHand');
-  const minHand = document.getElementById('minHand');
-  const secHand = document.getElementById('secHand');
-  const readout = document.getElementById('clockReadout');
-
-  function tickClock(){
+  // live clock, 12-hour local time
+  const clockEl = document.getElementById('clock');
+  function tick(){
     const now = new Date();
-    const h = now.getHours() % 12;
-    const m = now.getMinutes();
-    const s = now.getSeconds();
-    const ms = now.getMilliseconds();
-
-    const secDeg = ((s + ms/1000) / 60) * 360;
-    const minDeg = ((m + s/60) / 60) * 360;
-    const hourDeg = ((h + m/60) / 12) * 360;
-
-    hourHand.style.transform = 'rotate(' + hourDeg + 'deg)';
-    minHand.style.transform = 'rotate(' + minDeg + 'deg)';
-    secHand.style.transform = 'rotate(' + secDeg + 'deg)';
-
-    const timeStr = now.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit', second:'2-digit' });
-    const dateStr = now.toLocaleDateString([], { weekday:'short', month:'short', day:'numeric' }).toUpperCase();
-    readout.textContent = timeStr + ' · ' + dateStr;
-
-    requestAnimationFrame(tickClock);
+    const opts = { hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true };
+    clockEl.textContent = 'Current time — ' + now.toLocaleTimeString(undefined, opts);
   }
-  requestAnimationFrame(tickClock);
-
-  // draggable clock — mouse + touch via pointer events
-  const clockWrap = document.getElementById('clockWrap');
-  const clockHint = document.getElementById('clockHint');
-  let dragging = false, offsetX = 0, offsetY = 0, hintHidden = false;
-
-  function hideHint(){
-    if(hintHidden) return;
-    hintHidden = true;
-    clockHint.classList.add('hidden');
-  }
-  setTimeout(hideHint, 5000);
-
-  function startDrag(e){
-    dragging = true;
-    const rect = clockWrap.getBoundingClientRect();
-    offsetX = e.clientX - rect.left;
-    offsetY = e.clientY - rect.top;
-    clockWrap.style.left = rect.left + 'px';
-    clockWrap.style.top = rect.top + 'px';
-    clockWrap.style.right = 'auto';
-    clockWrap.style.bottom = 'auto';
-    clockWrap.classList.add('dragging');
-    clockWrap.setPointerCapture(e.pointerId);
-    hideHint();
-  }
-  function moveDrag(e){
-    if(!dragging) return;
-    const w = clockWrap.offsetWidth, h = clockWrap.offsetHeight;
-    let x = e.clientX - offsetX;
-    let y = e.clientY - offsetY;
-    x = Math.min(Math.max(8, x), window.innerWidth - w - 8);
-    y = Math.min(Math.max(8, y), window.innerHeight - h - 8);
-    clockWrap.style.left = x + 'px';
-    clockWrap.style.top = y + 'px';
-  }
-  function endDrag(){
-    dragging = false;
-    clockWrap.classList.remove('dragging');
-  }
-
-  clockWrap.addEventListener('pointerdown', startDrag);
-  window.addEventListener('pointermove', moveDrag);
-  window.addEventListener('pointerup', endDrag);
-  window.addEventListener('pointercancel', endDrag);
+  tick();
+  setInterval(tick, 1000);
 </script>
 
 </body>
